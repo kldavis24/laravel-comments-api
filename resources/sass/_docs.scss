@@ -1,0 +1,160 @@
+.docs__section {
+  color: #e2edf4;
+  font-family: "Droid Sans", system-ui, sans-serif;
+  font-weight: bold;
+  background: #3c4b5f;
+}
+hr {
+  border-top: 1px solid #e2edf4;
+  margin-bottom: 0;
+}
+.docs__url_box {
+  background: #e2edf4;;
+  line-height: 24px;
+  border: 1px solid #d4d4d4;
+  color: #3C4B5F;
+  border-radius: 3px;
+  font-size: 14px;
+  padding: 4px 8px;
+  word-break: break-all;
+  width: 100%;
+}
+.docs__get_color {
+  color: #3eb63e;
+  font-weight: 600;
+}
+.docs__post_color {
+  color: #f5a623;
+  font-weight: 600;
+}
+.docs__center {
+  padding-left: 25%;
+  padding-right: 25%;
+}
+.docs__table {
+  width: 100%;
+  border: 1px solid #d4d4d4;
+  border-radius: 3px;
+  border-spacing: 0;
+  border-collapse: separate;
+  font-size: 14px;
+  line-height: 24px;
+}
+.docs__table>tbody>tr:nth-child(odd) {
+  background-color: #fafafa;
+  color: #3C4B5F;
+}
+.docs__table>tbody>tr>td {
+  padding: 8px;
+}
+.docs__text_md {
+  font-weight: bold;
+}
+.docs__curl_container {
+  background: #000;
+  padding: 6px;
+  border-radius: 3px;
+}
+.docs__curl_example {
+  font-family: Menlo,Monaco,Consolas,Courier New,monospace;
+  color: #f8f8f2;
+  margin: 0;
+  background: transparent;
+  border-radius: 0;
+  overflow: auto;
+  font-size: .8rem;
+  font-weight: bold;
+  line-height: 20px;
+  border: none;
+}
+.docs__curl_string {
+  color: #e6db74;
+}
+.docs__curl_tab {
+  margin-left: 2em;
+}
+.docs__curl_tab2 {
+  margin-left: 4em;
+}
+.docs__curl_tab3 {
+  margin-left: 6em;
+}
+.docs__curl_tab4 {
+  margin-left: 8em;
+}
+.docs__php_variable {
+  color: #65C3FF;
+}
+.docs__php_string {
+  color: #C3E88D;
+}
+.docs__php_CURLOPT {
+  color: #F78C6C;
+}
+.docs__php_method,
+.docs__php_null {
+  color: #C792EA;
+}
+.docs__php_parameter {
+  color: #F74D51;
+}
+.docs__php_function {
+  color: #82AAFF;
+}
+.docs__php_default {
+  color: #EEFFFF;
+}
+.docs__js_variable,
+.docs__js_null {
+  color: #39B1FF;
+}
+.docs__js_var {
+  color: #5679FF
+}
+.docs__js_parameter {
+  color: #12F9C7;
+}
+.docs__js_string {
+  color: #6ee2ff;
+}
+.docs__js_axios {
+  color: #9876AA;
+  font-weight: bold;
+}
+.docs__js_comment {
+  color: #4B5E73;
+  font-weight: bold;
+}
+.docs__js_function {
+  color: #39B1FF;
+}
+.docs__js_default {
+  color: #aec2e0;
+}
+.docs__js_method {
+  color: #267FB5;
+}
+.container-fluid {
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+.hover\:text-teal-400:hover {
+  color: #4fd1c5;
+  cursor: pointer;
+}
+.hover\:text-teal-500:hover {
+  color: #38b2ac;
+  cursor: pointer;
+}
+select:required:invalid {
+  color: gray;
+}
+option[value=""][disabled] {
+  display: none;
+}
+option {
+  color: black;
+}
