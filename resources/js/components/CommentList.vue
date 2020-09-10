@@ -1,32 +1,36 @@
 <template>
-    <div class="bg-90 flex flex-col items-center justify-center">
-        <div class="flex w-full my-4">
-            <div class="w-1/5 text-center">
-                <label v-bind:for="filteredEmail" class="cursor-pointer"> Email
-                    <input v-model="filteredEmail" type="text">
-                </label>
-            </div>
-            <div class="w-1/5 text-center">
-                <label v-bind:for="startDate" class="cursor-pointer"> Start Date
-                    <input v-model="startDate" type="date">
-                </label>
-            </div>
-            <div class="w-1/5 text-center">
-                <label v-bind:for="endDate" class="cursor-pointer"> End Date
-                    <input v-model="endDate" type="date">
-                </label>
-            </div>
-            <div class="w-1/5 text-center">
-                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" v-on:click="filterCommentsByDate(startDate, endDate)">
-                    Filter <i class="fas fa-filter"></i>
-                </button>
-            </div>
-            <div class="w-1/5 text-center">
-                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" v-if="filterActive" v-on:click="clearFilters">Clear</button>
+    <div class="bg-90 droid flex">
+        <div class="w-1/6 p-6">
+            <div class="bg-grey-blue text-white p-10 rounded-lg">
+                <div class="w-full pb-4">
+                    <p class="text-teal-400 text-2xl underline">
+                        Filters <span><i class="fas fa-filter text-base"></i></span>
+                    </p>
+                </div>
+                <div class="w-full pb-4">
+                    <label v-bind:for="filteredEmail" class="w-full cursor-pointer"> Email
+                        <input class="w-full text-grey-blue" v-model="filteredEmail" type="text">
+                    </label>
+                </div>
+                <div class="w-full pb-4">
+                    <label v-bind:for="startDate" class="w-full cursor-pointer"> Start Date
+                        <input class="w-full text-grey-blue" id="startDate" v-model="startDate" type="date">
+                    </label>
+                </div>
+                <div class="w-full pb-4">
+                    <label v-bind:for="endDate" class="w-full cursor-pointer"> End Date
+                        <input class="w-full text-grey-blue" id="endDate" v-model="endDate" type="date">
+                    </label>
+                </div>
+                <div class="w-full">
+                    <button class="bg-teal-400 hover:bg-teal-500 text-white font-bold py-2 px-4 rounded" v-if="datesActive" v-on:click="clearFilters">Clear Dates</button>
+                </div>
             </div>
         </div>
-        <table class="table-cell">
-            <thead class="bg-gray-800 text-white">
+
+        <div class="w-5/6 pt-6">
+            <table class="table-cell">
+                <thead class="bg-grey-blue text-white">
                 <tr>
                     <th class="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">Body</th>
                     <th class="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">Email</th>
@@ -36,8 +40,8 @@
                     <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Approved</th>
                     <th class="w-1/6 text-left py-3 px-4 uppercase font-semibold text-sm">Created</th>
                 </tr>
-            </thead>
-            <tbody class="text-gray-700">
+                </thead>
+                <tbody class="text-gray-700">
                 <tr v-for="comment in comments">
                     <td class="w-1/3 text-left py-3 px-4">{{comment.body}}</td>
                     <td class="w-1/3 text-left py-3 px-4">{{comment.email}}</td>
@@ -63,8 +67,9 @@
                     </td>
                     <td class="w-1/6 text-left py-3 px-4">{{comment.created_at | dateFormat}}</td>
                 </tr>
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
     </div>
 </template>
 
@@ -76,8 +81,8 @@
             startDate: '',
             endDate: '',
             filteredEmail: '',
+            datesActive: false,
             comments: [],
-            filterActive: false,
         }),
 
         filters: {
@@ -89,6 +94,20 @@
         watch: {
             filteredEmail() {
                 this.filteredEmail !== '' ? this.filterCommentsByEmail(this.filteredEmail) : this.clearFilters()
+            },
+
+            startDate() {
+                if (this.endDate !== '') {
+                    this.filterCommentsByDate(this.startDate, this.endDate)
+                    this.datesActive = true
+                }
+            },
+
+            endDate() {
+                if (this.startDate !== '') {
+                    this.filterCommentsByDate(this.startDate, this.endDate)
+                    this.datesActive = true
+                }
             }
         },
 
@@ -106,7 +125,7 @@
 
                     console.log(`Comment id ${comment_id} has been updated to: ${approval_status}!`);
                 }).catch(error => {
-                    console.log(`Error toggling approval for comment id ${id}: ${error}`)
+                    console.error(`There was a problem toggling approval for comment id ${id} - ${error}`)
                 })
             },
 
@@ -118,7 +137,7 @@
                         this.comments.push(comment)
                     })
                 }).catch(error => {
-                    console.log(`Error fetching comments: ${error}`)
+                    console.error(`There was a problem fetching comments - ${error}`)
                 })
             },
 
@@ -128,7 +147,7 @@
                         let image = response.data.name
                         window.open(`/images/${image}`, '_blank');
                     }).catch(error => {
-                        console.log(error)
+                        console.error(error)
                 })
             },
 
@@ -143,7 +162,7 @@
                         this.comments.push(comment)
                     })
                 }).catch(error => {
-                    console.log(`Error fetching comments via date query: ${error}`)
+                    console.error(`There was a problem fetching comments via date query - ${error}`)
                 })
                 this.filterActive = true
             },
@@ -157,16 +176,24 @@
                         this.comments.push(comment)
                     })
                 }).catch(error => {
-                    console.log(`Error fetching comments via email query: ${error}`)
+                    console.error(`There was a problem fetching comments via email query - ${error}`)
                 })
                 this.filterActive = true
             },
 
             clearFilters() {
+                this.startDate = null
+                this.endDate = null
                 this.comments = []
                 this.fetchAllComments()
-                this.filterActive = false
-                this.filteredEmail = ''
+                this.datesActive = false
+            },
+
+            formatTodaysDate() {
+                let today = new Date()
+                let offset = today.getTimezoneOffset()
+                today = new Date(today.getTime() + (offset*60*1000))
+                return today.toISOString().split('T')[0]
             }
         }
     }
@@ -180,7 +207,10 @@
     }
     input:checked ~ .toggle__dot {
         transform: translateX(100%);
-        background-color: #48bb78;
+        background-color: #4fd1c5;
+    }
+    input:focus {
+        outline: none;
     }
     tr:nth-child(even) {
         background-color: #f2f2f2;

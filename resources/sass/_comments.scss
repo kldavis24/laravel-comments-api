@@ -10,5 +10,23 @@ h2 {
   font-weight: 700;
 }
 .nav-gradient {
-  background: linear-gradient(0deg, rgb(27, 44, 84), rgb(123 232 171));
+  background: linear-gradient(0deg, #077b73, #08cbc0);
+}
+.login-icon {
+    font-size: 8rem;
+    color: #07a89f;
+}
+.bg-grey-blue {
+    background: #3c4b5f;
+}
+.text-grey-blue {
+    color: #3c4b5f;
+}
+.droid {
+    font-family: "Droid Sans", system-ui, sans-serif;
+}
+.overlay {
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 2;
+    transition: opacity .5s;
 }

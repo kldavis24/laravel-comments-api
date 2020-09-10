@@ -114,24 +114,6 @@ class CommentController extends Controller
     }
 
     /**
-     * Validation of the Authentication header from the incoming request.
-     *
-     * @param $request
-     *
-     * @return bool
-     */
-//    public function validateAuthentication($request)
-//    {
-//        $auth = $request->header('Authorization');
-//        $decoded = base64_decode(substr($auth, 6));
-//
-//        if ($decoded == config('services.comment.authorization')) {
-//            return true;
-//        }
-//        return false;
-//    }
-
-    /**
      * Save the base64 encoded image locally before sending
      * it off to the s3 bucket.
      *
@@ -215,14 +197,14 @@ class CommentController extends Controller
     /**
      * Query the database for Comments between creation dates.
      *
-     * @param $beginning
+     * @param $start
      * @param $end
      *
      * @return Comment[]|\Illuminate\Database\Eloquent\Collection
      */
-    public function returnCommentsBetweenDates($beginning, $end)
+    public function returnCommentsBetweenDates($start, $end)
     {
-        return Comment::whereBetween(DB::raw('DATE(created_at)'), [$beginning, $end])->get();
+        return Comment::whereBetween(DB::raw('DATE(created_at)'), [$start, $end])->get();
     }
 
     /**

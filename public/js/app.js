@@ -1978,6 +1978,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "CommentList",
   data: function data() {
@@ -1985,8 +1990,8 @@ __webpack_require__.r(__webpack_exports__);
       startDate: '',
       endDate: '',
       filteredEmail: '',
-      comments: [],
-      filterActive: false
+      datesActive: false,
+      comments: []
     };
   },
   filters: {
@@ -1997,6 +2002,18 @@ __webpack_require__.r(__webpack_exports__);
   watch: {
     filteredEmail: function filteredEmail() {
       this.filteredEmail !== '' ? this.filterCommentsByEmail(this.filteredEmail) : this.clearFilters();
+    },
+    startDate: function startDate() {
+      if (this.endDate !== '') {
+        this.filterCommentsByDate(this.startDate, this.endDate);
+        this.datesActive = true;
+      }
+    },
+    endDate: function endDate() {
+      if (this.startDate !== '') {
+        this.filterCommentsByDate(this.startDate, this.endDate);
+        this.datesActive = true;
+      }
     }
   },
   mounted: function mounted() {
@@ -2010,7 +2027,7 @@ __webpack_require__.r(__webpack_exports__);
         var approval_status = comment_approval === 0 ? 'disapproved' : 'approved';
         console.log("Comment id ".concat(comment_id, " has been updated to: ").concat(approval_status, "!"));
       })["catch"](function (error) {
-        console.log("Error toggling approval for comment id ".concat(id, ": ").concat(error));
+        console.error("There was a problem toggling approval for comment id ".concat(id, " - ").concat(error));
       });
     },
     fetchAllComments: function fetchAllComments() {
@@ -2022,7 +2039,7 @@ __webpack_require__.r(__webpack_exports__);
           _this.comments.push(comment);
         });
       })["catch"](function (error) {
-        console.log("Error fetching comments: ".concat(error));
+        console.error("There was a problem fetching comments - ".concat(error));
       });
     },
     fetchCommentImage: function fetchCommentImage(id) {
@@ -2030,7 +2047,7 @@ __webpack_require__.r(__webpack_exports__);
         var image = response.data.name;
         window.open("/images/".concat(image), '_blank');
       })["catch"](function (error) {
-        console.log(error);
+        console.error(error);
       });
     },
     filterCommentsByDate: function filterCommentsByDate(start, end) {
@@ -2045,7 +2062,7 @@ __webpack_require__.r(__webpack_exports__);
           _this2.comments.push(comment);
         });
       })["catch"](function (error) {
-        console.log("Error fetching comments via date query: ".concat(error));
+        console.error("There was a problem fetching comments via date query - ".concat(error));
       });
       this.filterActive = true;
     },
@@ -2059,15 +2076,22 @@ __webpack_require__.r(__webpack_exports__);
           _this3.comments.push(comment);
         });
       })["catch"](function (error) {
-        console.log("Error fetching comments via email query: ".concat(error));
+        console.error("There was a problem fetching comments via email query - ".concat(error));
       });
       this.filterActive = true;
     },
     clearFilters: function clearFilters() {
+      this.startDate = null;
+      this.endDate = null;
       this.comments = [];
       this.fetchAllComments();
-      this.filterActive = false;
-      this.filteredEmail = '';
+      this.datesActive = false;
+    },
+    formatTodaysDate: function formatTodaysDate() {
+      var today = new Date();
+      var offset = today.getTimezoneOffset();
+      today = new Date(today.getTime() + offset * 60 * 1000);
+      return today.toISOString().split('T')[0];
     }
   }
 });
@@ -3595,6 +3619,40 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -3607,7 +3665,9 @@ __webpack_require__.r(__webpack_exports__);
         scopes: []
       }),
       showCreateModal: false,
-      showAccessTokenModal: false
+      showAccessTokenModal: false,
+      deleteWasClicked: false,
+      tokenToBeDeleted: null
     };
   },
   ready: function ready() {
@@ -3636,7 +3696,12 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     showCreateTokenForm: function showCreateTokenForm() {
+      document.body.classList.add('overlay');
       this.showCreateModal = true;
+    },
+    closeCreateTokenForm: function closeCreateTokenForm() {
+      document.body.classList.remove('overlay');
+      this.showCreateModal = false;
     },
     store: function store() {
       var _this3 = this;
@@ -3652,6 +3717,16 @@ __webpack_require__.r(__webpack_exports__);
 
         _this3.showAccessToken(response.data.accessToken);
       });
+    },
+    markTokenForDeletion: function markTokenForDeletion(token) {
+      document.body.classList.add('overlay');
+      this.tokenToBeDeleted = token;
+      this.deleteWasClicked = true;
+    },
+    clearDeleteStatus: function clearDeleteStatus() {
+      document.body.classList.remove('overlay');
+      this.tokenToBeDeleted = null;
+      this.deleteWasClicked = false;
     },
     toggleScope: function toggleScope(scope) {
       if (this.scopeIsAssigned(scope)) {
@@ -3673,6 +3748,8 @@ __webpack_require__.r(__webpack_exports__);
       var _this4 = this;
 
       axios["delete"]("/oauth/personal-access-tokens/".concat(token.id)).then(function (response) {
+        _this4.deleteWasClicked = false;
+
         _this4.getTokens();
       });
     }
@@ -3693,7 +3770,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".toggle__dot[data-v-b2309ffc] {\n  top: -.25rem;\n  left: -.25rem;\n  transition: all 0.3s ease-in-out;\n}\ninput:checked ~ .toggle__dot[data-v-b2309ffc] {\n  transform: translateX(100%);\n  background-color: #48bb78;\n}\ntr[data-v-b2309ffc]:nth-child(even) {\n  background-color: #f2f2f2;\n}\n.image-preview[data-v-b2309ffc]:hover {\n  cursor: pointer;\n}\n.fa-image[data-v-b2309ffc],\n.fa-file-image[data-v-b2309ffc] {\n  color: deepskyblue;\n}\n.fa-times-circle[data-v-b2309ffc] {\n  color: crimson;\n}\n", ""]);
+exports.push([module.i, ".toggle__dot[data-v-b2309ffc] {\n  top: -.25rem;\n  left: -.25rem;\n  transition: all 0.3s ease-in-out;\n}\ninput:checked ~ .toggle__dot[data-v-b2309ffc] {\n  transform: translateX(100%);\n  background-color: #4fd1c5;\n}\ninput[data-v-b2309ffc]:focus {\n  outline: none;\n}\ntr[data-v-b2309ffc]:nth-child(even) {\n  background-color: #f2f2f2;\n}\n.image-preview[data-v-b2309ffc]:hover {\n  cursor: pointer;\n}\n.fa-image[data-v-b2309ffc],\n.fa-file-image[data-v-b2309ffc] {\n  color: deepskyblue;\n}\n.fa-times-circle[data-v-b2309ffc] {\n  color: crimson;\n}\n", ""]);
 
 // exports
 
@@ -3750,7 +3827,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "tr[data-v-49962cc0]:nth-child(even) {\n  background-color: #f2f2f2;\n}\n", ""]);
+exports.push([module.i, "tr[data-v-49962cc0]:nth-child(even) {\n  background-color: #f2f2f2;\n}\n.fade-enter-active[data-v-49962cc0], .fade-leave-active[data-v-49962cc0] {\n  transition: opacity .5s;\n}\n.fade-enter[data-v-49962cc0], .fade-leave-to[data-v-49962cc0] /* .fade-leave-active below version 2.1.8 */ {\n  opacity: 0;\n}\n", ""]);
 
 // exports
 
@@ -23143,20 +23220,20 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "bg-90 flex flex-col items-center justify-center" },
-    [
-      _c("div", { staticClass: "flex w-full my-4" }, [
-        _c("div", { staticClass: "w-1/5 text-center" }, [
+  return _c("div", { staticClass: "bg-90 droid flex" }, [
+    _c("div", { staticClass: "w-1/6 p-6" }, [
+      _c("div", { staticClass: "bg-grey-blue text-white p-10 rounded-lg" }, [
+        _vm._m(0),
+        _vm._v(" "),
+        _c("div", { staticClass: "w-full pb-4" }, [
           _c(
             "label",
             {
-              staticClass: "cursor-pointer",
+              staticClass: "w-full cursor-pointer",
               attrs: { for: _vm.filteredEmail }
             },
             [
-              _vm._v(" Email\n                "),
+              _vm._v(" Email\n                    "),
               _c("input", {
                 directives: [
                   {
@@ -23166,6 +23243,7 @@ var render = function() {
                     expression: "filteredEmail"
                   }
                 ],
+                staticClass: "w-full text-grey-blue",
                 attrs: { type: "text" },
                 domProps: { value: _vm.filteredEmail },
                 on: {
@@ -23181,12 +23259,15 @@ var render = function() {
           )
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "w-1/5 text-center" }, [
+        _c("div", { staticClass: "w-full pb-4" }, [
           _c(
             "label",
-            { staticClass: "cursor-pointer", attrs: { for: _vm.startDate } },
+            {
+              staticClass: "w-full cursor-pointer",
+              attrs: { for: _vm.startDate }
+            },
             [
-              _vm._v(" Start Date\n                "),
+              _vm._v(" Start Date\n                    "),
               _c("input", {
                 directives: [
                   {
@@ -23196,7 +23277,8 @@ var render = function() {
                     expression: "startDate"
                   }
                 ],
-                attrs: { type: "date" },
+                staticClass: "w-full text-grey-blue",
+                attrs: { id: "startDate", type: "date" },
                 domProps: { value: _vm.startDate },
                 on: {
                   input: function($event) {
@@ -23211,12 +23293,15 @@ var render = function() {
           )
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "w-1/5 text-center" }, [
+        _c("div", { staticClass: "w-full pb-4" }, [
           _c(
             "label",
-            { staticClass: "cursor-pointer", attrs: { for: _vm.endDate } },
+            {
+              staticClass: "w-full cursor-pointer",
+              attrs: { for: _vm.endDate }
+            },
             [
-              _vm._v(" End Date\n                "),
+              _vm._v(" End Date\n                    "),
               _c("input", {
                 directives: [
                   {
@@ -23226,7 +23311,8 @@ var render = function() {
                     expression: "endDate"
                   }
                 ],
-                attrs: { type: "date" },
+                staticClass: "w-full text-grey-blue",
+                attrs: { id: "endDate", type: "date" },
                 domProps: { value: _vm.endDate },
                 on: {
                   input: function($event) {
@@ -23241,42 +23327,25 @@ var render = function() {
           )
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "w-1/5 text-center" }, [
-          _c(
-            "button",
-            {
-              staticClass:
-                "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded",
-              on: {
-                click: function($event) {
-                  return _vm.filterCommentsByDate(_vm.startDate, _vm.endDate)
-                }
-              }
-            },
-            [
-              _vm._v("\n                Filter "),
-              _c("i", { staticClass: "fas fa-filter" })
-            ]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "w-1/5 text-center" }, [
-          _vm.filterActive
+        _c("div", { staticClass: "w-full" }, [
+          _vm.datesActive
             ? _c(
                 "button",
                 {
                   staticClass:
-                    "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded",
+                    "bg-teal-400 hover:bg-teal-500 text-white font-bold py-2 px-4 rounded",
                   on: { click: _vm.clearFilters }
                 },
-                [_vm._v("Clear")]
+                [_vm._v("Clear Dates")]
               )
             : _vm._e()
         ])
-      ]),
-      _vm._v(" "),
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "w-5/6 pt-6" }, [
       _c("table", { staticClass: "table-cell" }, [
-        _vm._m(0),
+        _vm._m(1),
         _vm._v(" "),
         _c(
           "tbody",
@@ -23377,15 +23446,26 @@ var render = function() {
           0
         )
       ])
-    ]
-  )
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("thead", { staticClass: "bg-gray-800 text-white" }, [
+    return _c("div", { staticClass: "w-full pb-4" }, [
+      _c("p", { staticClass: "text-teal-400 text-2xl underline" }, [
+        _vm._v("\n                    Filters "),
+        _c("span", [_c("i", { staticClass: "fas fa-filter text-base" })])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", { staticClass: "bg-grey-blue text-white" }, [
       _c("tr", [
         _c(
           "th",
@@ -23470,7 +23550,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
+  return _c("div", { staticClass: "droid" }, [
     _vm._m(0),
     _vm._v(" "),
     _c("div", { staticClass: "about w-full" }, [
@@ -23697,7 +23777,7 @@ var render = function() {
             _c(
               "span",
               {
-                staticClass: "text-blue-500 mr-4 hover:text-teal-500",
+                staticClass: "text-teal-400 mr-4 hover:text-teal-500",
                 attrs: { id: "cliVisible" },
                 on: { click: _vm.showExample }
               },
@@ -23707,7 +23787,7 @@ var render = function() {
             _c(
               "span",
               {
-                staticClass: "text-blue-500 mr-4 hover:text-teal-500",
+                staticClass: "text-teal-400 mr-4 hover:text-teal-500",
                 attrs: { id: "phpVisible" },
                 on: { click: _vm.showExample }
               },
@@ -23717,7 +23797,7 @@ var render = function() {
             _c(
               "span",
               {
-                staticClass: "text-blue-500 mr-4 hover:text-teal-500",
+                staticClass: "text-teal-400 mr-4 hover:text-teal-500",
                 attrs: { id: "jsVisible" },
                 on: { click: _vm.showExample }
               },
@@ -24454,7 +24534,7 @@ var render = function() {
             _c(
               "span",
               {
-                staticClass: "text-blue-500 mr-4 hover:text-teal-500",
+                staticClass: "text-teal-400 mr-4 hover:text-teal-500",
                 attrs: { id: "cliVisible" },
                 on: { click: _vm.showExample }
               },
@@ -24464,7 +24544,7 @@ var render = function() {
             _c(
               "span",
               {
-                staticClass: "text-blue-500 mr-4 hover:text-teal-500",
+                staticClass: "text-teal-400 mr-4 hover:text-teal-500",
                 attrs: { id: "phpVisible" },
                 on: { click: _vm.showExample }
               },
@@ -24474,7 +24554,7 @@ var render = function() {
             _c(
               "span",
               {
-                staticClass: "text-blue-500 mr-4 hover:text-teal-500",
+                staticClass: "text-teal-400 mr-4 hover:text-teal-500",
                 attrs: { id: "jsVisible" },
                 on: { click: _vm.showExample }
               },
@@ -25213,7 +25293,7 @@ var render = function() {
             _c(
               "span",
               {
-                staticClass: "text-blue-500 mr-4 hover:text-teal-500",
+                staticClass: "text-teal-400 mr-4 hover:text-teal-500",
                 attrs: { id: "cliVisible" },
                 on: { click: _vm.showExample }
               },
@@ -25223,7 +25303,7 @@ var render = function() {
             _c(
               "span",
               {
-                staticClass: "text-blue-500 mr-4 hover:text-teal-500",
+                staticClass: "text-teal-400 mr-4 hover:text-teal-500",
                 attrs: { id: "phpVisible" },
                 on: { click: _vm.showExample }
               },
@@ -25233,7 +25313,7 @@ var render = function() {
             _c(
               "span",
               {
-                staticClass: "text-blue-500 mr-4 hover:text-teal-500",
+                staticClass: "text-teal-400 mr-4 hover:text-teal-500",
                 attrs: { id: "jsVisible" },
                 on: { click: _vm.showExample }
               },
@@ -25994,7 +26074,7 @@ var render = function() {
           _c(
             "span",
             {
-              staticClass: "text-blue-500 mr-4 hover:text-teal-500",
+              staticClass: "text-teal-400 mr-4 hover:text-teal-500",
               attrs: { id: "cliVisible" },
               on: { click: _vm.showExample }
             },
@@ -26004,7 +26084,7 @@ var render = function() {
           _c(
             "span",
             {
-              staticClass: "text-blue-500 mr-4 hover:text-teal-500",
+              staticClass: "text-teal-400 mr-4 hover:text-teal-500",
               attrs: { id: "phpVisible" },
               on: { click: _vm.showExample }
             },
@@ -26014,7 +26094,7 @@ var render = function() {
           _c(
             "span",
             {
-              staticClass: "text-blue-500 mr-4 hover:text-teal-500",
+              staticClass: "text-teal-400 mr-4 hover:text-teal-500",
               attrs: { id: "jsVisible" },
               on: { click: _vm.showExample }
             },
@@ -27215,7 +27295,7 @@ var render = function() {
             _c(
               "span",
               {
-                staticClass: "text-blue-500 mr-4 hover:text-teal-500",
+                staticClass: "text-teal-400 mr-4 hover:text-teal-500",
                 attrs: { id: "cliVisible" },
                 on: { click: _vm.showExample }
               },
@@ -27225,7 +27305,7 @@ var render = function() {
             _c(
               "span",
               {
-                staticClass: "text-blue-500 mr-4 hover:text-teal-500",
+                staticClass: "text-teal-400 mr-4 hover:text-teal-500",
                 attrs: { id: "phpVisible" },
                 on: { click: _vm.showExample }
               },
@@ -27235,7 +27315,7 @@ var render = function() {
             _c(
               "span",
               {
-                staticClass: "text-blue-500 mr-4 hover:text-teal-500",
+                staticClass: "text-teal-400 mr-4 hover:text-teal-500",
                 attrs: { id: "jsVisible" },
                 on: { click: _vm.showExample }
               },
@@ -28183,7 +28263,7 @@ var render = function() {
             _c(
               "span",
               {
-                staticClass: "text-blue-500 mr-4 hover:text-teal-500",
+                staticClass: "text-teal-400 mr-4 hover:text-teal-500",
                 attrs: { id: "cliVisible" },
                 on: { click: _vm.showExample }
               },
@@ -28193,7 +28273,7 @@ var render = function() {
             _c(
               "span",
               {
-                staticClass: "text-blue-500 mr-4 hover:text-teal-500",
+                staticClass: "text-teal-400 mr-4 hover:text-teal-500",
                 attrs: { id: "phpVisible" },
                 on: { click: _vm.showExample }
               },
@@ -28203,7 +28283,7 @@ var render = function() {
             _c(
               "span",
               {
-                staticClass: "text-blue-500 mr-4 hover:text-teal-500",
+                staticClass: "text-teal-400 mr-4 hover:text-teal-500",
                 attrs: { id: "jsVisible" },
                 on: { click: _vm.showExample }
               },
@@ -29563,355 +29643,455 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c(
-      "div",
-      { staticClass: "bg-90 flex flex-col items-center justify-center" },
-      [
-        _vm._m(0),
-        _vm._v(" "),
-        _vm.tokens.length > 0
-          ? _c("table", { staticClass: "table-cell" }, [
-              _vm._m(1),
-              _vm._v(" "),
-              _c(
-                "tbody",
-                _vm._l(_vm.tokens, function(token, index) {
-                  return _c("tr", { key: index }, [
-                    _c("td", { staticClass: "text-left py-3 px-4" }, [
-                      _vm._v(_vm._s(token.name))
-                    ]),
-                    _vm._v(" "),
-                    _c("td", { staticClass: "text-left py-3 px-4" }, [
-                      _vm._v(_vm._s(token.created_at))
-                    ]),
-                    _vm._v(" "),
-                    _c("td", { staticClass: "text-left py-3 px-4" }, [
-                      _vm._v(_vm._s(token.expires_at))
-                    ]),
-                    _vm._v(" "),
-                    _c("td", { staticClass: "text-center py-3 px-4" }, [
-                      _c("span", [
-                        _c("i", {
-                          staticClass:
-                            "cursor-pointer text-red-600 fas fa-trash",
-                          on: {
-                            click: function($event) {
-                              return _vm.revoke(token)
+  return _c(
+    "div",
+    { staticClass: "droid" },
+    [
+      _c(
+        "div",
+        { staticClass: "bg-90 flex flex-col items-center justify-center" },
+        [
+          _vm._m(0),
+          _vm._v(" "),
+          _vm.tokens.length > 0
+            ? _c("table", { staticClass: "table-cell pt-6 pb-6" }, [
+                _vm._m(1),
+                _vm._v(" "),
+                _c(
+                  "tbody",
+                  _vm._l(_vm.tokens, function(token, index) {
+                    return _c("tr", { key: index }, [
+                      _c("td", { staticClass: "text-left py-3 px-4" }, [
+                        _vm._v(_vm._s(token.name))
+                      ]),
+                      _vm._v(" "),
+                      _c("td", { staticClass: "text-left py-3 px-4" }, [
+                        _vm._v(_vm._s(token.created_at))
+                      ]),
+                      _vm._v(" "),
+                      _c("td", { staticClass: "text-left py-3 px-4" }, [
+                        _vm._v(_vm._s(token.expires_at))
+                      ]),
+                      _vm._v(" "),
+                      _c("td", { staticClass: "text-center py-3 px-4" }, [
+                        _c("span", [
+                          _c("i", {
+                            staticClass:
+                              "cursor-pointer text-red-600 fas fa-trash",
+                            on: {
+                              click: function($event) {
+                                return _vm.markTokenForDeletion(token)
+                              }
                             }
-                          }
-                        })
+                          })
+                        ])
                       ])
                     ])
-                  ])
-                }),
-                0
-              )
-            ])
-          : _c("div", { staticClass: "mb-20 pt-5", attrs: { role: "alert" } }, [
-              _c(
+                  }),
+                  0
+                )
+              ])
+            : _c(
                 "div",
-                {
-                  staticClass:
-                    "bg-blue text-white font-bold rounded-t px-4 py-2"
-                },
-                [_vm._v("Oops!")]
+                { staticClass: "mb-20 pt-5", attrs: { role: "alert" } },
+                [
+                  _c(
+                    "div",
+                    {
+                      staticClass:
+                        "bg-blue text-white font-bold rounded-t px-4 py-2"
+                    },
+                    [_vm._v("Oops!")]
+                  ),
+                  _vm._v(" "),
+                  _vm._m(2)
+                ]
               ),
-              _vm._v(" "),
-              _vm._m(2)
-            ]),
-        _vm._v(" "),
-        _c(
-          "button",
-          {
-            staticClass:
-              "bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded",
-            on: { click: _vm.showCreateTokenForm }
-          },
-          [_vm._v("Create New Token")]
-        )
-      ]
-    ),
-    _vm._v(" "),
-    _vm.showCreateModal
-      ? _c("div", [
-          _c("div", { staticClass: "fixed pin w-full flex items-center" }, [
-            _c("div", { staticClass: "fixed pin bg-black opacity-75 z-10" }),
-            _vm._v(" "),
-            _c(
-              "div",
-              {
-                staticClass:
-                  "relative mx-6 md:mx-auto w-full md:w-1/2 lg:w-1/3 z-20 m-8"
-              },
-              [
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass:
+                "bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded",
+              on: { click: _vm.showCreateTokenForm }
+            },
+            [_vm._v("Create New Token")]
+          )
+        ]
+      ),
+      _vm._v(" "),
+      _c("transition", { attrs: { name: "fade" } }, [
+        _vm.deleteWasClicked
+          ? _c("div", [
+              _c("div", { staticClass: "fixed pin w-full flex items-center" }, [
+                _c("div", {
+                  staticClass: "fixed pin bg-black opacity-75 z-10"
+                }),
+                _vm._v(" "),
                 _c(
                   "div",
-                  { staticClass: "shadow-lg bg-white rounded-lg p-8" },
+                  {
+                    staticClass:
+                      "relative mx-6 md:mx-auto w-full md:w-1/2 lg:w-1/3 z-20 m-8"
+                  },
                   [
-                    _c("div", { staticClass: "flex justify-end mb-6" }, [
-                      _c(
-                        "button",
-                        {
-                          on: {
-                            click: function($event) {
-                              _vm.showCreateModal = false
-                            }
-                          }
-                        },
-                        [_vm._m(3)]
-                      )
-                    ]),
-                    _vm._v(" "),
                     _c(
-                      "h1",
-                      { staticClass: "text-center text-2xl text-blue-dark" },
-                      [_vm._v("Create Token")]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "form",
-                      {
-                        staticClass: "pt-6 pb-2 my-2",
-                        on: {
-                          submit: function($event) {
-                            $event.preventDefault()
-                            return _vm.store($event)
-                          }
-                        }
-                      },
+                      "div",
+                      { staticClass: "shadow-lg bg-white rounded-lg p-8" },
                       [
+                        _c("div", { staticClass: "flex justify-end mb-6" }, [
+                          _c(
+                            "button",
+                            { on: { click: _vm.clearDeleteStatus } },
+                            [
+                              _c("span", [
+                                _c("i", {
+                                  staticClass: "text-red-600 fas fa-times"
+                                })
+                              ])
+                            ]
+                          )
+                        ]),
+                        _vm._v(" "),
                         _c(
-                          "div",
-                          { staticClass: "mb-4" },
+                          "h1",
+                          {
+                            staticClass: "text-center text-2xl text-blue-dark"
+                          },
                           [
-                            _c(
-                              "label",
-                              {
-                                staticClass: "block text-sm font-bold mb-2",
-                                attrs: { for: "name" }
-                              },
-                              [_vm._v("Name")]
-                            ),
-                            _vm._v(" "),
-                            _c("input", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: _vm.form.name,
-                                  expression: "form.name"
-                                }
-                              ],
-                              staticClass:
-                                "block appearance-none outline-none w-full h-full border focus:border-blue bg-grey-lightest text-grey-darker py-3 pr-3 pl-9 rounded",
-                              class: {
-                                "border-red": _vm.form.errors.has("name")
-                              },
-                              attrs: {
-                                id: "name",
-                                placeholder: " Name Your Token",
-                                type: "text"
-                              },
-                              domProps: { value: _vm.form.name },
-                              on: {
-                                keyup: function($event) {
-                                  if (
-                                    !$event.type.indexOf("key") &&
-                                    _vm._k(
-                                      $event.keyCode,
-                                      "enter",
-                                      13,
-                                      $event.key,
-                                      "Enter"
-                                    )
-                                  ) {
-                                    return null
-                                  }
-                                  return _vm.store($event)
-                                },
-                                input: function($event) {
-                                  if ($event.target.composing) {
-                                    return
-                                  }
-                                  _vm.$set(
-                                    _vm.form,
-                                    "name",
-                                    $event.target.value
-                                  )
-                                }
-                              }
-                            }),
-                            _vm._v(" "),
-                            _c("has-error", {
-                              staticClass: "text-red",
-                              attrs: { form: _vm.form, field: "name" }
-                            })
-                          ],
-                          1
+                            _vm._v(
+                              "Are you sure you'd like to delete this token?"
+                            )
+                          ]
                         ),
                         _vm._v(" "),
-                        _vm.scopes.length > 0
-                          ? _c("div", { staticClass: "mb-4 flex flex-wrap" }, [
-                              _c(
-                                "label",
-                                {
-                                  staticClass:
-                                    "w-full pr-4 pl-4 pt-2 pb-2 mb-0 leading-normal font-bold -ml-4"
-                                },
-                                [_vm._v("Scopes")]
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "div",
-                                { staticClass: "w-full pr-4 pl-4" },
-                                _vm._l(_vm.scopes, function(scope, index) {
-                                  return _c("div", { key: index }, [
-                                    _c("div", { staticClass: "checkbox" }, [
-                                      _c("label", [
-                                        _c("input", {
-                                          attrs: { type: "checkbox" },
-                                          domProps: {
-                                            checked: _vm.scopeIsAssigned(
-                                              scope.id
-                                            )
-                                          },
-                                          on: {
-                                            click: function($event) {
-                                              return _vm.toggleScope(scope.id)
-                                            }
-                                          }
-                                        }),
-                                        _vm._v(
-                                          "\n                                            " +
-                                            _vm._s(scope.id) +
-                                            "\n                                        "
-                                        )
-                                      ])
-                                    ])
-                                  ])
-                                }),
-                                0
-                              )
-                            ])
-                          : _vm._e(),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "block" }, [
-                          _c("div", [
-                            _c(
-                              "button",
-                              {
-                                staticClass:
-                                  "float-right text-white bg-blue-600 hover:bg-blue-800 font-bold py-2 px-4 rounded border-b-4 border-blue-darkest",
-                                attrs: { type: "button" },
-                                on: { click: _vm.store }
-                              },
-                              [_vm._v("Create")]
-                            )
-                          ])
+                        _c("div", { staticClass: "w-full text-center pt-6" }, [
+                          _c(
+                            "button",
+                            {
+                              staticClass:
+                                "bg-teal-400 hover:bg-teal-500 text-white font-bold py-2 px-4 rounded",
+                              on: {
+                                click: function($event) {
+                                  return _vm.revoke(_vm.tokenToBeDeleted)
+                                }
+                              }
+                            },
+                            [_vm._v("Yep")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              staticClass:
+                                "bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded",
+                              on: { click: _vm.clearDeleteStatus }
+                            },
+                            [_vm._v("Nah")]
+                          )
                         ])
                       ]
                     )
                   ]
                 )
-              ]
-            )
-          ])
-        ])
-      : _vm._e(),
-    _vm._v(" "),
-    _vm.showAccessTokenModal
-      ? _c("div", [
-          _c("div", { staticClass: "fixed pin w-full flex items-center" }, [
-            _c("div", { staticClass: "fixed pin bg-black opacity-75 z-10" }),
-            _vm._v(" "),
-            _c(
-              "div",
-              {
-                staticClass:
-                  "relative mx-6 md:mx-auto w-full md:w-1/2 lg:w-1/3 z-20 m-8"
-              },
-              [
+              ])
+            ])
+          : _vm._e()
+      ]),
+      _vm._v(" "),
+      _c("transition", { attrs: { name: "fade" } }, [
+        _vm.showCreateModal
+          ? _c("div", [
+              _c("div", { staticClass: "fixed pin w-full flex items-center" }, [
+                _c("div", {
+                  staticClass: "fixed pin bg-black opacity-75 z-10"
+                }),
+                _vm._v(" "),
                 _c(
                   "div",
-                  { staticClass: "shadow-lg bg-white rounded-lg p-8" },
+                  {
+                    staticClass:
+                      "relative mx-6 md:mx-auto w-full md:w-1/2 lg:w-1/3 z-20 m-8"
+                  },
                   [
-                    _c("div", { staticClass: "flex justify-end mb-6" }, [
-                      _c(
-                        "button",
-                        {
-                          on: {
-                            click: function($event) {
-                              _vm.showAccessTokenModal = false
-                            }
-                          }
-                        },
-                        [_vm._m(4)]
-                      )
-                    ]),
-                    _vm._v(" "),
                     _c(
-                      "h1",
-                      {
-                        staticClass: "text-center text-2xl text-teal-dark pb-5"
-                      },
-                      [_vm._v("Personal Access Token")]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "p",
-                      {
-                        staticClass:
-                          "text-justify text-grey-darker text-lg tracking-tight pb-5"
-                      },
+                      "div",
+                      { staticClass: "shadow-lg bg-white rounded-lg p-8" },
                       [
-                        _vm._v(
-                          "\n                        Here is your new personal access token. This is the only time it will be shown so don't lose it!\n                        You may now use this token to make API requests.\n                    "
+                        _c("div", { staticClass: "flex justify-end mb-6" }, [
+                          _c(
+                            "button",
+                            { on: { click: _vm.closeCreateTokenForm } },
+                            [
+                              _c("span", [
+                                _c("i", {
+                                  staticClass: "text-red-600 fas fa-times"
+                                })
+                              ])
+                            ]
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "h1",
+                          {
+                            staticClass: "text-center text-2xl text-blue-dark"
+                          },
+                          [_vm._v("Create Token")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "form",
+                          {
+                            staticClass: "pt-6 pb-2 my-2",
+                            on: {
+                              submit: function($event) {
+                                $event.preventDefault()
+                                return _vm.store($event)
+                              }
+                            }
+                          },
+                          [
+                            _c("div", { staticClass: "mb-4" }, [
+                              _c(
+                                "label",
+                                {
+                                  staticClass: "block text-sm font-bold mb-2",
+                                  attrs: { for: "name" }
+                                },
+                                [_vm._v("Name")]
+                              ),
+                              _vm._v(" "),
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.form.name,
+                                    expression: "form.name"
+                                  }
+                                ],
+                                staticClass:
+                                  "block appearance-none outline-none w-full h-full border focus:border-blue bg-grey-lightest text-grey-darker py-3 pr-3 pl-9 rounded",
+                                class: {
+                                  "border-red": _vm.form.errors.has("name")
+                                },
+                                attrs: {
+                                  id: "name",
+                                  placeholder: " Name Your Token",
+                                  type: "text"
+                                },
+                                domProps: { value: _vm.form.name },
+                                on: {
+                                  keyup: function($event) {
+                                    if (
+                                      !$event.type.indexOf("key") &&
+                                      _vm._k(
+                                        $event.keyCode,
+                                        "enter",
+                                        13,
+                                        $event.key,
+                                        "Enter"
+                                      )
+                                    ) {
+                                      return null
+                                    }
+                                    return _vm.store($event)
+                                  },
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      _vm.form,
+                                      "name",
+                                      $event.target.value
+                                    )
+                                  }
+                                }
+                              })
+                            ]),
+                            _vm._v(" "),
+                            _vm.scopes.length > 0
+                              ? _c(
+                                  "div",
+                                  { staticClass: "mb-4 flex flex-wrap" },
+                                  [
+                                    _c(
+                                      "label",
+                                      {
+                                        staticClass:
+                                          "w-full pr-4 pl-4 pt-2 pb-2 mb-0 leading-normal font-bold -ml-4"
+                                      },
+                                      [_vm._v("Scopes")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      { staticClass: "w-full pr-4 pl-4" },
+                                      _vm._l(_vm.scopes, function(
+                                        scope,
+                                        index
+                                      ) {
+                                        return _c("div", { key: index }, [
+                                          _c(
+                                            "div",
+                                            { staticClass: "checkbox" },
+                                            [
+                                              _c("label", [
+                                                _c("input", {
+                                                  attrs: { type: "checkbox" },
+                                                  domProps: {
+                                                    checked: _vm.scopeIsAssigned(
+                                                      scope.id
+                                                    )
+                                                  },
+                                                  on: {
+                                                    click: function($event) {
+                                                      return _vm.toggleScope(
+                                                        scope.id
+                                                      )
+                                                    }
+                                                  }
+                                                }),
+                                                _vm._v(
+                                                  "\n                                                " +
+                                                    _vm._s(scope.id) +
+                                                    "\n                                            "
+                                                )
+                                              ])
+                                            ]
+                                          )
+                                        ])
+                                      }),
+                                      0
+                                    )
+                                  ]
+                                )
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "block" }, [
+                              _c("div", { staticClass: "w-full text-center" }, [
+                                _c(
+                                  "button",
+                                  {
+                                    staticClass:
+                                      "text-white bg-blue-600 hover:bg-blue-800 font-bold py-2 px-4 rounded",
+                                    attrs: { type: "button" },
+                                    on: { click: _vm.store }
+                                  },
+                                  [_vm._v("Create")]
+                                )
+                              ])
+                            ])
+                          ]
                         )
                       ]
-                    ),
-                    _vm._v(" "),
-                    _c("label", [
-                      _c("textarea", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.accessToken,
-                            expression: "accessToken"
-                          }
-                        ],
-                        staticClass:
-                          "block appearance-none w-full py-1 px-2 mb-1 text-base leading-normal bg-white text-grey-darker border border-grey rounded",
-                        attrs: { rows: "10" },
-                        domProps: { value: _vm.accessToken },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.accessToken = $event.target.value
-                          }
-                        }
-                      })
-                    ])
+                    )
                   ]
                 )
-              ]
-            )
+              ])
+            ])
+          : _vm._e()
+      ]),
+      _vm._v(" "),
+      _vm.showAccessTokenModal
+        ? _c("div", [
+            _c("div", { staticClass: "fixed pin w-full flex items-center" }, [
+              _c("div", { staticClass: "fixed pin bg-black opacity-75 z-10" }),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  staticClass:
+                    "relative mx-6 md:mx-auto w-full md:w-1/2 lg:w-1/3 z-20 m-8"
+                },
+                [
+                  _c(
+                    "div",
+                    { staticClass: "shadow-lg bg-white rounded-lg p-8" },
+                    [
+                      _c("div", { staticClass: "flex justify-end mb-6" }, [
+                        _c(
+                          "button",
+                          {
+                            on: {
+                              click: function($event) {
+                                _vm.showAccessTokenModal = false
+                              }
+                            }
+                          },
+                          [_vm._m(3)]
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "h1",
+                        {
+                          staticClass:
+                            "text-center text-2xl text-teal-dark pb-5"
+                        },
+                        [_vm._v("Personal Access Token")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "p",
+                        {
+                          staticClass:
+                            "text-justify text-grey-darker text-lg tracking-tight pb-5"
+                        },
+                        [
+                          _vm._v(
+                            "\n                        Here is your new personal access token. This is the only time it will be shown so don't lose it!\n                        You may now use this token to make API requests.\n                    "
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c("label", [
+                        _c("textarea", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.accessToken,
+                              expression: "accessToken"
+                            }
+                          ],
+                          staticClass:
+                            "block appearance-none w-full py-1 px-2 mb-1 text-base leading-normal bg-white text-grey-darker border border-grey rounded",
+                          attrs: { rows: "10" },
+                          domProps: { value: _vm.accessToken },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.accessToken = $event.target.value
+                            }
+                          }
+                        })
+                      ])
+                    ]
+                  )
+                ]
+              )
+            ])
           ])
-        ])
-      : _vm._e()
-  ])
+        : _vm._e()
+    ],
+    1
+  )
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "flex items-center justify-between" }, [
-      _c("span", { staticClass: "text-2xl" }, [_vm._v("Personal API Tokens")])
-    ])
+    return _c(
+      "div",
+      { staticClass: "flex items-center pt-10 justify-between" },
+      [_c("span", { staticClass: "text-2xl" }, [_vm._v("Personal API Tokens")])]
+    )
   },
   function() {
     var _vm = this
@@ -29971,12 +30151,6 @@ var staticRenderFns = [
         ])
       ]
     )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("span", [_c("i", { staticClass: "text-red-600 fas fa-times" })])
   },
   function() {
     var _vm = this

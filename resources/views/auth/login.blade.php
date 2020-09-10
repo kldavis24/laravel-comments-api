@@ -5,7 +5,7 @@
         <div class="flex flex-wrap justify-center">
             <div class="w-full max-w-sm">
                 <div class="mx-auto py-8 max-w-sm text-center text-90">
-                    <img class="mx-auto" src="/images/design/fjlogo.png" alt="Farm Journal Logo"/>
+                    <span><i class="far fa-comments text-teal-400 text-10xl"></i></span>
                 </div>
                 <div class="flex flex-col break-words bg-white border border-2 rounded shadow-md">
                     <form class="w-full p-6" method="POST" action="{{ route('login') }}">
@@ -52,7 +52,7 @@
                         </div>
 
                         <div class="flex flex-wrap items-center">
-                            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-gray-100 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                            <button type="submit" class="bg-teal-400 hover:bg-teal-500 text-gray-100 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                                 {{ __('Login') }}
                             </button>
 

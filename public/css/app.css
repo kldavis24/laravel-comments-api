@@ -6507,11 +6507,11 @@ video {
 }
 
 .text-xs{
-  font-size: 0.75rem;
+  font-size: .75rem;
 }
 
 .text-sm{
-  font-size: 0.875rem;
+  font-size: .875rem;
 }
 
 .text-base{
@@ -6538,12 +6538,20 @@ video {
   font-size: 2.25rem;
 }
 
-.text-5xl{
-  font-size: 3rem;
+.text-7xl{
+  font-size: 5rem;
 }
 
-.text-6xl{
-  font-size: 4rem;
+.text-8xl{
+  font-size: 6rem;
+}
+
+.text-9xl{
+  font-size: 7rem;
+}
+
+.text-10xl{
+  font-size: 8rem;
 }
 
 .leading-3{
@@ -21187,7 +21195,30 @@ h2 {
 }
 
 .nav-gradient {
-  background: linear-gradient(0deg, #1b2c54, #7be8ab);
+  background: linear-gradient(0deg, #077b73, #08cbc0);
+}
+
+.login-icon {
+  font-size: 8rem;
+  color: #07a89f;
+}
+
+.bg-grey-blue {
+  background: #3c4b5f;
+}
+
+.text-grey-blue {
+  color: #3c4b5f;
+}
+
+.droid {
+  font-family: "Droid Sans", system-ui, sans-serif;
+}
+
+.overlay {
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 2;
+  transition: opacity 0.5s;
 }
 
 .docs__section {
@@ -27029,11 +27060,11 @@ option {
   }
 
   .sm\:text-xs{
-    font-size: 0.75rem;
+    font-size: .75rem;
   }
 
   .sm\:text-sm{
-    font-size: 0.875rem;
+    font-size: .875rem;
   }
 
   .sm\:text-base{
@@ -27060,12 +27091,20 @@ option {
     font-size: 2.25rem;
   }
 
-  .sm\:text-5xl{
-    font-size: 3rem;
+  .sm\:text-7xl{
+    font-size: 5rem;
   }
 
-  .sm\:text-6xl{
-    font-size: 4rem;
+  .sm\:text-8xl{
+    font-size: 6rem;
+  }
+
+  .sm\:text-9xl{
+    font-size: 7rem;
+  }
+
+  .sm\:text-10xl{
+    font-size: 8rem;
   }
 
   .sm\:leading-3{
@@ -44290,11 +44329,11 @@ option {
   }
 
   .md\:text-xs{
-    font-size: 0.75rem;
+    font-size: .75rem;
   }
 
   .md\:text-sm{
-    font-size: 0.875rem;
+    font-size: .875rem;
   }
 
   .md\:text-base{
@@ -44321,12 +44360,20 @@ option {
     font-size: 2.25rem;
   }
 
-  .md\:text-5xl{
-    font-size: 3rem;
+  .md\:text-7xl{
+    font-size: 5rem;
   }
 
-  .md\:text-6xl{
-    font-size: 4rem;
+  .md\:text-8xl{
+    font-size: 6rem;
+  }
+
+  .md\:text-9xl{
+    font-size: 7rem;
+  }
+
+  .md\:text-10xl{
+    font-size: 8rem;
   }
 
   .md\:leading-3{
@@ -61551,11 +61598,11 @@ option {
   }
 
   .lg\:text-xs{
-    font-size: 0.75rem;
+    font-size: .75rem;
   }
 
   .lg\:text-sm{
-    font-size: 0.875rem;
+    font-size: .875rem;
   }
 
   .lg\:text-base{
@@ -61582,12 +61629,20 @@ option {
     font-size: 2.25rem;
   }
 
-  .lg\:text-5xl{
-    font-size: 3rem;
+  .lg\:text-7xl{
+    font-size: 5rem;
   }
 
-  .lg\:text-6xl{
-    font-size: 4rem;
+  .lg\:text-8xl{
+    font-size: 6rem;
+  }
+
+  .lg\:text-9xl{
+    font-size: 7rem;
+  }
+
+  .lg\:text-10xl{
+    font-size: 8rem;
   }
 
   .lg\:leading-3{
@@ -78812,11 +78867,11 @@ option {
   }
 
   .xl\:text-xs{
-    font-size: 0.75rem;
+    font-size: .75rem;
   }
 
   .xl\:text-sm{
-    font-size: 0.875rem;
+    font-size: .875rem;
   }
 
   .xl\:text-base{
@@ -78843,12 +78898,20 @@ option {
     font-size: 2.25rem;
   }
 
-  .xl\:text-5xl{
-    font-size: 3rem;
+  .xl\:text-7xl{
+    font-size: 5rem;
   }
 
-  .xl\:text-6xl{
-    font-size: 4rem;
+  .xl\:text-8xl{
+    font-size: 6rem;
+  }
+
+  .xl\:text-9xl{
+    font-size: 7rem;
+  }
+
+  .xl\:text-10xl{
+    font-size: 8rem;
   }
 
   .xl\:leading-3{

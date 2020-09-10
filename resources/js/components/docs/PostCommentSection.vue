@@ -50,9 +50,9 @@
                 </table>
                 <p class="mb-2"><span class="docs__text_md underline">Code Examples</span></p>
                 <p class="mb-2">
-                    <span id="cliVisible" class="text-blue-500 mr-4 hover:text-teal-500" v-on:click="showExample">Command Line</span>
-                    <span id="phpVisible" class="text-blue-500 mr-4 hover:text-teal-500" v-on:click="showExample">PHP</span>
-                    <span id="jsVisible" class="text-blue-500 mr-4 hover:text-teal-500" v-on:click="showExample">Javascript</span>
+                    <span id="cliVisible" class="text-teal-400 mr-4 hover:text-teal-500" v-on:click="showExample">Command Line</span>
+                    <span id="phpVisible" class="text-teal-400 mr-4 hover:text-teal-500" v-on:click="showExample">PHP</span>
+                    <span id="jsVisible" class="text-teal-400 mr-4 hover:text-teal-500" v-on:click="showExample">Javascript</span>
                 </p>
                 <div v-if="visibleExample === 'cliVisible'" class="docs__curl_container">
                     <p class="docs__curl_example">

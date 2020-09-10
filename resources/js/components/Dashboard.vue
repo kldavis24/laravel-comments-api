@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="droid">
         <div class="header w-full relative grid">
             <div class="header__bg w-full h-full top-0 left-0 absolute"></div>
             <h1 class="header__title uppercase">Comments Dashboard</h1>
