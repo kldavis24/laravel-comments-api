@@ -1983,6 +1983,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "CommentList",
   data: function data() {
@@ -2245,13 +2246,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Navigation",
+  props: ['login', 'logout', 'docs', 'dashboard', 'tokens', 'comments'],
   data: function data() {
     return {
       dashboardActive: false,
       commentsActive: false,
       docsActive: false,
       tokensActive: false,
-      currentPath: window.location.pathname
+      currentPath: window.location.href
     };
   },
   mounted: function mounted() {
@@ -2260,19 +2262,19 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     displayCurrentPage: function displayCurrentPage() {
       switch (this.currentPath) {
-        case '/comments/all':
+        case this.comments:
           this.commentsActive = true;
           break;
 
-        case '/docs':
+        case this.docs:
           this.docsActive = true;
           break;
 
-        case '/tokens':
+        case this.tokens:
           this.tokensActive = true;
           break;
 
-        case '/':
+        case "".concat(this.dashboard, "/"):
           this.dashboardActive = true;
           break;
       }
@@ -23220,20 +23222,25 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "bg-90 droid flex" }, [
-    _c("div", { staticClass: "w-1/6 p-6" }, [
-      _c("div", { staticClass: "bg-grey-blue text-white p-10 rounded-lg" }, [
-        _vm._m(0),
-        _vm._v(" "),
-        _c("div", { staticClass: "w-full pb-4" }, [
-          _c(
-            "label",
-            {
-              staticClass: "w-full cursor-pointer",
-              attrs: { for: _vm.filteredEmail }
-            },
-            [
-              _vm._v(" Email\n                    "),
+  return _c(
+    "div",
+    { staticClass: "bg-90 flex flex-col droid items-center justify-center" },
+    [
+      _c("div", { staticClass: "w-3/5 p-6" }, [
+        _c("div", { staticClass: "bg-grey-blue text-white p-2 rounded-lg" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c("div", { staticClass: "flex w-full" }, [
+            _c("div", { staticClass: "w-1/3 text-center pb-4" }, [
+              _c(
+                "label",
+                {
+                  staticClass: "block cursor-pointer pb-2",
+                  attrs: { for: _vm.filteredEmail }
+                },
+                [_vm._v(" Email")]
+              ),
+              _vm._v(" "),
               _c("input", {
                 directives: [
                   {
@@ -23243,7 +23250,7 @@ var render = function() {
                     expression: "filteredEmail"
                   }
                 ],
-                staticClass: "w-full text-grey-blue",
+                staticClass: "w-half text-grey-blue",
                 attrs: { type: "text" },
                 domProps: { value: _vm.filteredEmail },
                 on: {
@@ -23255,19 +23262,18 @@ var render = function() {
                   }
                 }
               })
-            ]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "w-full pb-4" }, [
-          _c(
-            "label",
-            {
-              staticClass: "w-full cursor-pointer",
-              attrs: { for: _vm.startDate }
-            },
-            [
-              _vm._v(" Start Date\n                    "),
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "w-1/3 text-center pb-4" }, [
+              _c(
+                "label",
+                {
+                  staticClass: "block cursor-pointer pb-2",
+                  attrs: { for: _vm.startDate }
+                },
+                [_vm._v(" Start Date")]
+              ),
+              _vm._v(" "),
               _c("input", {
                 directives: [
                   {
@@ -23277,7 +23283,7 @@ var render = function() {
                     expression: "startDate"
                   }
                 ],
-                staticClass: "w-full text-grey-blue",
+                staticClass: "w-half text-grey-blue",
                 attrs: { id: "startDate", type: "date" },
                 domProps: { value: _vm.startDate },
                 on: {
@@ -23289,19 +23295,18 @@ var render = function() {
                   }
                 }
               })
-            ]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "w-full pb-4" }, [
-          _c(
-            "label",
-            {
-              staticClass: "w-full cursor-pointer",
-              attrs: { for: _vm.endDate }
-            },
-            [
-              _vm._v(" End Date\n                    "),
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "w-1/3 text-center pb-4" }, [
+              _c(
+                "label",
+                {
+                  staticClass: "block cursor-pointer pb-2",
+                  attrs: { for: _vm.endDate }
+                },
+                [_vm._v(" End Date")]
+              ),
+              _vm._v(" "),
               _c("input", {
                 directives: [
                   {
@@ -23311,7 +23316,7 @@ var render = function() {
                     expression: "endDate"
                   }
                 ],
-                staticClass: "w-full text-grey-blue",
+                staticClass: "w-half text-grey-blue",
                 attrs: { id: "endDate", type: "date" },
                 domProps: { value: _vm.endDate },
                 on: {
@@ -23323,131 +23328,142 @@ var render = function() {
                   }
                 }
               })
-            ]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "w-full" }, [
-          _vm.datesActive
-            ? _c(
-                "button",
-                {
-                  staticClass:
-                    "bg-teal-400 hover:bg-teal-500 text-white font-bold py-2 px-4 rounded",
-                  on: { click: _vm.clearFilters }
-                },
-                [_vm._v("Clear Dates")]
-              )
-            : _vm._e()
-        ])
-      ])
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "w-5/6 pt-6" }, [
-      _c("table", { staticClass: "table-cell" }, [
-        _vm._m(1),
-        _vm._v(" "),
-        _c(
-          "tbody",
-          { staticClass: "text-gray-700" },
-          _vm._l(_vm.comments, function(comment) {
-            return _c("tr", [
-              _c("td", { staticClass: "w-1/3 text-left py-3 px-4" }, [
-                _vm._v(_vm._s(comment.body))
-              ]),
-              _vm._v(" "),
-              _c("td", { staticClass: "w-1/3 text-left py-3 px-4" }, [
-                _vm._v(_vm._s(comment.email))
-              ]),
-              _vm._v(" "),
-              _c("td", { staticClass: "text-left py-3 px-4" }, [
-                _vm._v(_vm._s(comment.zip))
-              ]),
-              _vm._v(" "),
-              _c("td", { staticClass: "text-center py-3 px-4" }, [
-                _vm._v(_vm._s(comment.state))
-              ]),
-              _vm._v(" "),
-              _c("td", { staticClass: "text-center py-3 px-4" }, [
-                comment.image_id
-                  ? _c("span", [
-                      _c(
-                        "span",
-                        {
-                          staticClass: "image-preview",
-                          on: {
-                            click: function($event) {
-                              return _vm.fetchCommentImage(comment.id)
-                            }
-                          }
-                        },
-                        [_c("i", { staticClass: "fas fa-file-image" })]
-                      )
-                    ])
-                  : _c("span", [
-                      _c("i", { staticClass: "fas fa-times-circle" })
-                    ])
-              ]),
-              _vm._v(" "),
-              _c("td", { staticClass: "text-left py-3 px-4" }, [
-                _c("div", { staticClass: "flex items-center justify-center" }, [
-                  _c(
-                    "label",
-                    {
-                      staticClass: "flex items-center cursor-pointer",
-                      attrs: { for: comment.id }
-                    },
-                    [
-                      _c("div", { staticClass: "relative" }, [
-                        comment.approved === 1
-                          ? _c("input", {
-                              staticClass: "hidden",
-                              attrs: {
-                                id: comment.id,
-                                type: "checkbox",
-                                checked: ""
-                              },
-                              on: {
-                                click: function($event) {
-                                  return _vm.toggleCommentApproval(comment.id)
-                                }
-                              }
-                            })
-                          : _c("input", {
-                              staticClass: "hidden",
-                              attrs: { id: comment.id, type: "checkbox" },
-                              on: {
-                                click: function($event) {
-                                  return _vm.toggleCommentApproval(comment.id)
-                                }
-                              }
-                            }),
-                        _vm._v(" "),
-                        _c("div", {
-                          staticClass:
-                            "toggle__line w-10 h-4 bg-gray-400 rounded-full shadow-inner"
-                        }),
-                        _vm._v(" "),
-                        _c("div", {
-                          staticClass:
-                            "toggle__dot absolute w-6 h-6 bg-white rounded-full shadow inset-y-0 left-0"
-                        })
-                      ])
-                    ]
-                  )
-                ])
-              ]),
-              _vm._v(" "),
-              _c("td", { staticClass: "w-1/6 text-left py-3 px-4" }, [
-                _vm._v(_vm._s(_vm._f("dateFormat")(comment.created_at)))
-              ])
             ])
-          }),
-          0
-        )
-      ])
-    ])
-  ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "w-full text-center" }, [
+            _vm.datesActive
+              ? _c(
+                  "button",
+                  {
+                    staticClass:
+                      "bg-teal-400 hover:bg-teal-500 text-white font-bold py-2 px-4 rounded",
+                    on: { click: _vm.clearFilters }
+                  },
+                  [_vm._v("Clear Dates")]
+                )
+              : _vm._e()
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _vm.comments.length < 1
+        ? _c("h1", { staticClass: "text-5xl text-grey-blue pt-20" }, [
+            _vm._v("\n        Dang, no comments meet your criteria "),
+            _c("i", { staticClass: "far fa-sad-tear" })
+          ])
+        : _c("table", { staticClass: "table-cell" }, [
+            _vm._m(1),
+            _vm._v(" "),
+            _c(
+              "tbody",
+              { staticClass: "text-gray-700" },
+              _vm._l(_vm.comments, function(comment) {
+                return _c("tr", [
+                  _c("td", { staticClass: "w-1/3 text-left py-3 px-4" }, [
+                    _vm._v(_vm._s(comment.body))
+                  ]),
+                  _vm._v(" "),
+                  _c("td", { staticClass: "w-1/6 text-left py-3 px-4" }, [
+                    _vm._v(_vm._s(comment.email))
+                  ]),
+                  _vm._v(" "),
+                  _c("td", { staticClass: "text-left py-3 px-4" }, [
+                    _vm._v(_vm._s(comment.zip))
+                  ]),
+                  _vm._v(" "),
+                  _c("td", { staticClass: "text-center py-3 px-4" }, [
+                    _vm._v(_vm._s(comment.state))
+                  ]),
+                  _vm._v(" "),
+                  _c("td", { staticClass: "text-center py-3 px-4" }, [
+                    comment.image_id
+                      ? _c("span", [
+                          _c(
+                            "span",
+                            {
+                              staticClass: "image-preview",
+                              on: {
+                                click: function($event) {
+                                  return _vm.fetchCommentImage(comment.id)
+                                }
+                              }
+                            },
+                            [_c("i", { staticClass: "fas fa-file-image" })]
+                          )
+                        ])
+                      : _c("span", [
+                          _c("i", { staticClass: "fas fa-times-circle" })
+                        ])
+                  ]),
+                  _vm._v(" "),
+                  _c("td", { staticClass: "text-left py-3 px-4" }, [
+                    _c(
+                      "div",
+                      { staticClass: "flex items-center justify-center" },
+                      [
+                        _c(
+                          "label",
+                          {
+                            staticClass: "flex items-center cursor-pointer",
+                            attrs: { for: comment.id }
+                          },
+                          [
+                            _c("div", { staticClass: "relative" }, [
+                              comment.approved === 1
+                                ? _c("input", {
+                                    staticClass: "hidden",
+                                    attrs: {
+                                      id: comment.id,
+                                      type: "checkbox",
+                                      checked: ""
+                                    },
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.toggleCommentApproval(
+                                          comment.id
+                                        )
+                                      }
+                                    }
+                                  })
+                                : _c("input", {
+                                    staticClass: "hidden",
+                                    attrs: { id: comment.id, type: "checkbox" },
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.toggleCommentApproval(
+                                          comment.id
+                                        )
+                                      }
+                                    }
+                                  }),
+                              _vm._v(" "),
+                              _c("div", {
+                                staticClass:
+                                  "toggle__line w-10 h-4 bg-gray-400 rounded-full shadow-inner"
+                              }),
+                              _vm._v(" "),
+                              _c("div", {
+                                staticClass:
+                                  "toggle__dot absolute w-6 h-6 bg-white rounded-full shadow inset-y-0 left-0"
+                              })
+                            ])
+                          ]
+                        )
+                      ]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("td", { staticClass: "w-1/6 text-left py-3 px-4" }, [
+                    _vm._v(_vm._s(_vm._f("dateFormat")(comment.created_at)))
+                  ])
+                ])
+              }),
+              0
+            )
+          ])
+    ]
+  )
 }
 var staticRenderFns = [
   function() {
@@ -23455,8 +23471,8 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "w-full pb-4" }, [
-      _c("p", { staticClass: "text-teal-400 text-2xl underline" }, [
-        _vm._v("\n                    Filters "),
+      _c("p", { staticClass: "text-teal-400 text-center text-2xl" }, [
+        _vm._v("\n                    Comment Filters "),
         _c("span", [_c("i", { staticClass: "fas fa-filter text-base" })])
       ])
     ])
@@ -23480,7 +23496,7 @@ var staticRenderFns = [
           "th",
           {
             staticClass:
-              "w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm"
+              "w-1/6 text-left py-3 px-4 uppercase font-semibold text-sm"
           },
           [_vm._v("Email")]
         ),
@@ -23687,7 +23703,7 @@ var render = function() {
           staticClass:
             "ml-4 px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:underline",
           class: { underline: _vm.dashboardActive },
-          attrs: { id: "dashboard-nav", href: "/" }
+          attrs: { id: "dashboard-nav", href: this.dashboard }
         },
         [_vm._v("\n            Dashboard\n        ")]
       ),
@@ -23698,7 +23714,7 @@ var render = function() {
           staticClass:
             "ml-4 px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:underline",
           class: { underline: _vm.commentsActive },
-          attrs: { id: "comments-nav", href: "/comments/all" }
+          attrs: { id: "comments-nav", href: this.comments }
         },
         [_vm._v("\n            Comments\n        ")]
       ),
@@ -23709,9 +23725,9 @@ var render = function() {
           staticClass:
             "ml-4 px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:underline",
           class: { underline: _vm.docsActive },
-          attrs: { id: "docs-nav", href: "/docs" }
+          attrs: { id: "docs-nav", href: this.docs }
         },
-        [_vm._v("\n        API Docs\n      ")]
+        [_vm._v("\n            API Docs\n        ")]
       ),
       _vm._v(" "),
       _c(
@@ -23720,7 +23736,7 @@ var render = function() {
           staticClass:
             "ml-4 px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:underline",
           class: { underline: _vm.tokensActive },
-          attrs: { id: "tokens-nav", href: "/tokens" }
+          attrs: { id: "tokens-nav", href: this.tokens }
         },
         [_vm._v("\n            Tokens\n        ")]
       )

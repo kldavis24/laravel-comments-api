@@ -6,7 +6,15 @@
                     <p class="dashboard-title uppercase">Comments API</p>
                 </a>
             </div>
-            <navigation></navigation>
+            <navigation
+                    login="{{ route('login') }}"
+                    logout="{{ route('logout') }}"
+                    docs="{{ route('api_docs') }}"
+                    dashboard="{{ route('dashboard') }}"
+                    tokens="{{ route('tokens') }}"
+                    comments="{{ route('all_comments') }}"
+            >
+            </navigation>
             <div class="flex-1 text-right">
                 @guest
                     <a class="no-underline hover:underline text-gray-300 text-sm p-3" href="{{ route('login') }}">{{ __('Login') }}</a>
