@@ -29,7 +29,6 @@
         "@tailwindcss/ui": "^0.3.1",
         "dayjs": "^1.8.29",
         "vform": "^1.0.1",
-        "vue-headroom": "^0.10.1",
         "vuetify": "^2.3.4"
     }
 }
